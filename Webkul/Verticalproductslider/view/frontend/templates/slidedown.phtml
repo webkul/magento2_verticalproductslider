@@ -1,0 +1,116 @@
+<?php
+/** @var \Webkul\Verticalproductslider\Block\Slidedown $block */
+?>
+<?php 
+$_helper = $this->helper('Webkul\Verticalproductslider\Helper\Data');
+$store_config_data= $_helper->storeConfigData();
+$bg = $store_config_data['bg'];
+$noitems = $store_config_data['noitems'];
+$animate = $store_config_data['animate'];
+$width   = $store_config_data['width'];
+$height  = $store_config_data['height'];
+?>
+<link href="<?php echo $this->getViewFileUrl('Webkul_Verticalproductslider::css/slidedown.css') ?>" type="text/css" rel="stylesheet" />
+<style type="text/css" media="screen">
+    #sidebar {
+        background: <?php echo $bg;?>;
+        width:<?php echo $width;?>px;
+        height:<?php echo $height;?>px;
+    }
+</style>
+<div id="sidebar">
+    <ul class="spy">
+        <?php 
+        $category = $block->Category->load($noitems);
+        $collection = $category->getProductCollection();        
+        foreach ($collection as $product) {
+            $pro_id = $product->getId();
+            $product_coll = $block->Product->load($pro_id);
+            $image_url = $block->imageHelperObj()->init($product_coll, 'product_page_image_small')
+                        ->setImageFile($product_coll->getFile())
+                        ->getUrl();
+            ?>
+            <li>
+                <a href="<?php echo $product->getProductUrl()?>" title="<?php echo $product_coll->getName()?>">
+                    <img width="70" height="70" src="<?php echo $image_url?>" title="<?php echo $product_coll->getName()?>" />
+                </a>
+                <h5>
+                    <a href="<?php echo $product->getProductUrl()?>" title="<?php echo $product_coll->getName()?>">
+                        <?php echo $product_coll->getName()?>
+                    </a>
+                </h5>
+                <p class="info">
+                    <?php echo $product_coll->getFormatedPrice()?>
+                </p>
+                <p>
+                    <?php echo $block->getReviewsSummaryHtml($product, true, true)?>
+                </p>
+                <p class="tags">
+                    <a href="<?php echo $product->getProductUrl()?>" title=<?php echo $product_coll->getName()?>>
+                        <?php echo __('Add to Cart')?>
+                    </a>
+                </p>
+            </li>
+            <?php  
+        } ?>
+    </ul>
+</div>
+<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+<script type="text/javascript" charset="utf-8">
+    $js=jQuery.noConflict();
+    $js(function () {
+        $js('ul.spy').simpleSpy();
+    });
+    (function ($js) {            
+        $js.fn.simpleSpy = function (limit, interval) {
+            limit = limit ||10;
+            interval = interval ||<?php echo $animate;?>;                
+            return this.each(function () {
+                // 1. setup
+                    // capture a cache of all the list items
+                    // chomp the list down to limit li elements
+                var $list = $js(this),
+                    items = [], // uninitialised
+                    currentItem = limit,
+                    total = 0, // initialise later on
+                    height = $list.find('> li:first').height();                        
+                // capture the cache
+                $list.find('> li').each(function () {
+                    items.push('<li>' + $js(this).html() + '</li>');
+                });                    
+                total = items.length;                    
+                $list.wrap('<div class="spyWrapper" />').parent().css({ height : height * limit });
+                $list.find('> li').filter(':gt(' + (limit - 1) + ')').remove();
+                // 2. effect        
+                function spy() {
+                    // insert a new item with opacity and height of zero
+                    var $insert = $js(items[currentItem]).css({
+                        height : 0,
+                        opacity : 0,
+                        display : 'none'
+                    }).prependTo($list);
+                                
+                    // fade the LAST item out
+                    $list.find('> li:last').animate({ opacity : 0}, 1000, function () {
+                        // increase the height of the NEW first item
+                        $insert.animate({ height : height }, 1000).animate({ opacity : 1 }, 1000);
+                        
+                        // AND at the same time - decrease the height of the LAST item
+                        // $js(this).animate({ height : 0 }, 1000, function () {
+                            // finally fade the first item in (and we can remove the last)
+                            $js(this).remove();
+                        // });
+                    });
+                    
+                    currentItem++;
+                    if (currentItem >= total) {
+                        currentItem = 0;
+                    }
+                    
+                    setTimeout(spy, interval)
+                }             
+                spy();
+            });
+        };
+    })(jQuery);
+</script>

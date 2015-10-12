@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <tab id="webkul" translate="label" sortOrder="10">
+            <label>Webkul</label>
+        </tab>
+        <section id="webkul" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Product Vertical Slider</label>
+            <!-- Assign section to tab -->
+            <tab>webkul</tab>
+            <resource>Webkul_Verticalslider::config_webkul</resource>
+            <!-- create group for fields in section -->
+            <group id="webkul_verticalslider" translate="label" type="text" delault="1" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Parameters</label>
+                <field id="wk_verticalslider_category" translate="label comment" sortOrder="1" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Category Id</label>
+                    <comment>Set category id</comment>
+                </field>
+                <field id="wk_verticalslider_width" translate="label comment" sortOrder="2" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Width</label>
+                    <comment>Set Width e.g- 600;</comment>
+                </field>
+                <field id="wk_verticalslider_height" translate="label comment" sortOrder="3" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Height</label>
+                    <comment>Set Height e.g- 400;</comment>
+                </field>
+                <field id="wk_verticalslider_animation_time" translate="label comment" sortOrder="4" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Animation time</label>
+                    <comment>Enter Time in millisec e.g- 4000</comment>
+                </field>
+                <field id="wk_verticalslider_bg" translate="label comment" sortOrder="5" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Background Color</label>
+                    <comment>Set Background Color e.g- #CCCCCC</comment>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
